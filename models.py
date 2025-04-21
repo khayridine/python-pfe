@@ -3,7 +3,7 @@ from database import Base  # Assure-toi que Base est bien importé
 
 class User(Base):
     __tablename__ = "User"  # Nom de la table dans PostgreSQL (respecte la casse)
-    
+    #modele
     id = Column(Integer, primary_key=True)
     nom = Column(String, nullable=False)
     prenom = Column(String, nullable=False)
