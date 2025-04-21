@@ -10,6 +10,8 @@ from models import User
 from database import SessionLocal
 
 
+
+
 router = APIRouter(
     prefix='/auth',
     tags=['auth']
@@ -80,7 +82,20 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate user.')
 
     token = create_access_token(user.email, user.id, timedelta(minutes=20))  # Utilisation de l'email
-    return {'access_token': token, 'token_type': 'bearer'}
+    return {
+    'access_token': token,
+    'token_type': 'bearer',
+    'user': {
+        'id': user.id,
+        'nom': user.nom,
+        'prenom': user.prenom,
+        'email': user.email,
+        'num_tel': user.num_tel
+    }
+    }
+
+
+
 
 
 def authenticate_user(username: str, password: str, db: Session):
