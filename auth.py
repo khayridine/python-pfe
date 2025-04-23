@@ -75,6 +75,7 @@ async def create_user(create_user_request: CreateUserRequest, db: db_dependency)
     return {"message": "Utilisateur créé avec succès"}
 
 
+
 @router.post('/token', response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency):
     user = authenticate_user(form_data.username, form_data.password, db)
@@ -134,3 +135,19 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Could not validate user.'
         )
+    
+@router.get("/me")
+async def get_me(current_user: Annotated[dict, Depends(get_current_user)], db: db_dependency):
+    user = db.query(User).filter(User.id == current_user["id"]).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    return {
+        "id": user.id,
+        "nom": user.nom,
+        "prenom": user.prenom,
+        "email": user.email,
+        "num_tel": user.num_tel
+    }
+
+
