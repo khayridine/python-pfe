@@ -4,7 +4,10 @@ from auth import router as auth_router
 from user import router as user_router
 from operation import router as operation_router
 
+
+
 app = FastAPI()
+
 
 # Middleware CORS
 app.add_middleware(
@@ -19,3 +22,4 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(operation_router)
+
