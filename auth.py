@@ -143,7 +143,7 @@ async def get_me(current_user: Annotated[dict, Depends(get_current_user)], db: d
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
     
     return {
-        "id": user.id,
+        
         "nom": user.nom,
         "prenom": user.prenom,
         "email": user.email,

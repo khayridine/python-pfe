@@ -5,6 +5,7 @@ from pydantic import BaseModel
 router = APIRouter()
 
 class PortfolioRequest(BaseModel):
+    
     expected_returns: list[float]
     cov_matrix: list[list[float]]
 
