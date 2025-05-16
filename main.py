@@ -21,11 +21,11 @@ app.add_middleware(
 )
 
 # Inclusion des routes
-
 app.include_router(portefeuille_router)
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(operation_router)
 app.include_router(calcul_router)
+
 
 
