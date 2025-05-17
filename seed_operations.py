@@ -30,6 +30,7 @@ operations = [
     
 ]
 
+
 # Insertion dans la base
 session.add_all(operations)
 session.commit()

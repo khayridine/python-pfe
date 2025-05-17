@@ -1,31 +1,33 @@
+# portefeuille.py
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from models import Portefeuille, Actif
 from schemas import PortefeuilleCreate
 
-
 router = APIRouter()
 
-@router.post("/save-portefeuille")  
-
-def create_portefeuille(data: PortefeuilleCreate, db: Session = Depends(get_db)):
-    portefeuille = Portefeuille(montant_total=data.montant_total)
+@router.post("/save-portefeuille")
+def save_portefeuille(portefeuille_data: PortefeuilleCreate, db: Session = Depends(get_db)):
+    
+    portefeuille = Portefeuille(montant_total=portefeuille_data.montant_total)
     db.add(portefeuille)
-    db.flush()  # Pour récupérer l'id
+    db.commit()
+    db.refresh(portefeuille)
 
-    for actif in data.actifs:
+    
+    for actif_data in portefeuille_data.actifs:
         actif = Actif(
-            nom=actif.nom,
-            categorie=actif.categorie,
-            type=actif.type,
-            pourcentage=actif.pourcentage,
-            rendement=actif.rendement,
-            volatilite=actif.volatilite,
+            nom=actif_data.nom,
+            categorie=actif_data.categorie,
+            type=actif_data.type,
+            pourcentage=actif_data.pourcentage,
+            rendement=actif_data.rendement,
+            volatilite=actif_data.volatilite,
             portefeuille_id=portefeuille.id
         )
         db.add(actif)
 
     db.commit()
-    return {"message": "Portefeuille créé avec succès", "id": portefeuille.id}
-
+    return {"message": "Portefeuille sauvegardé avec succès", "id": portefeuille.id}

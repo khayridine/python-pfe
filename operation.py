@@ -29,7 +29,7 @@ class OperationOut(BaseModel):
     frais: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Route GET pour toutes les opérations
 @router.get("/operations", response_model=List[OperationOut])
