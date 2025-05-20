@@ -6,6 +6,8 @@ from database import get_db
 from models import Portefeuille, Actif
 from schemas import PortefeuilleCreate
 
+
+
 router = APIRouter()
 
 @router.post("/save-portefeuille")
