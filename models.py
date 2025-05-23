@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, JSON
 
 from sqlalchemy.orm import relationship
 
@@ -7,6 +7,11 @@ class Portefeuille(Base):
     __tablename__ = "portefeuilles"
     id = Column(Integer, primary_key=True, index=True)
     montant_total = Column(Float, nullable=False)
+
+    
+    rendement = Column(Float, nullable=True)   # Rendement estimé du portefeuille
+    volatilite = Column(Float, nullable=True)  # Volatilité / Risque du portefeuille
+
 
     actifs = relationship("Actif", back_populates="portefeuille", cascade="all, delete-orphan")
 
@@ -42,3 +47,16 @@ class Operation(Base):
     taxe = Column(Float)
     frais = Column(Float)
 
+
+class DraftModel(Base):
+    __tablename__ = "drafts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    expected_returns = Column(JSON, nullable=False)
+    cov_matrix = Column(JSON, nullable=False)
+    target_return = Column(Float, nullable=False)
+    current_weights = Column(JSON, nullable=False)
+    optimal_weights = Column(JSON, nullable=False)
+
+  

@@ -33,4 +33,4 @@ def save_portefeuille(portefeuille_data: PortefeuilleCreate, db: Session = Depen
 
     db.commit()
     return {"message": "Portefeuille sauvegardé avec succès", "id": portefeuille.id}
-print(">>> portefeuille.py chargé")
+
