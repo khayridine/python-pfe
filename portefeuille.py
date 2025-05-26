@@ -6,7 +6,7 @@ from sqlalchemy import func
 from fastapi.responses import JSONResponse
 from database import get_db
 from models import Portefeuille, Actif
-
+from typing import List
 from schemas import PortefeuilleCreate
 
 
@@ -50,7 +50,7 @@ def get_nombre_actifs_par_portefeuille(db: Session = Depends(get_db)):
 
 
 @router.get("/portefeuilles")
-def get_portefeuilles_complets(db: Session = Depends(get_db)):
+def get_portefeuilles_complets(taux_sans_risque: float = 7.5, db: Session = Depends(get_db)):
     portefeuilles = db.query(Portefeuille).all()
     data = []
     for pf in portefeuilles:
@@ -65,12 +65,11 @@ def get_portefeuilles_complets(db: Session = Depends(get_db)):
             }
             for a in pf.actifs
         ]
-        
-       
+
         rendement = sum(a.rendement * a.pourcentage / 100 for a in pf.actifs)
-        risque = sum(a.volatilite * a.pourcentage / 100 for a in pf.actifs)  
-        sharpe = rendement / risque if risque != 0 else 0
-        
+        risque = sum(a.volatilite * a.pourcentage / 100 for a in pf.actifs)
+        sharpe = (rendement - taux_sans_risque) / risque if risque != 0 else 0
+
         data.append({
             "id": pf.id,
             "montant_total": pf.montant_total,
@@ -80,3 +79,24 @@ def get_portefeuilles_complets(db: Session = Depends(get_db)):
             "sharpe": sharpe
         })
     return JSONResponse(content=data)
+
+@router.post("/comparer")
+def comparer_portefeuilles(portefeuille_ids: List[int], taux_sans_risque: float = 7.5, db: Session = Depends(get_db)):
+    portefeuilles = db.query(Portefeuille).filter(Portefeuille.id.in_(portefeuille_ids)).all()
+    data = []
+    for pf in portefeuilles:
+        rendement = sum(a.rendement * a.pourcentage / 100 for a in pf.actifs)
+        risque = sum(a.volatilite * a.pourcentage / 100 for a in pf.actifs)
+        sharpe = (rendement - taux_sans_risque) / risque if risque != 0 else 0
+
+        data.append({
+            "id": pf.id,
+            "montant_total": pf.montant_total,
+            "nombre_actifs": len(pf.actifs),
+            "rendement": rendement,
+            "risque": risque,
+            "sharpe": sharpe
+        })
+    
+    meilleur_portefeuille = max(data, key=lambda x: x["sharpe"]) if data else None
+    return {"portefeuilles": data, "meilleur": meilleur_portefeuille}
