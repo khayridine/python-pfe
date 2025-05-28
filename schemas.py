@@ -13,10 +13,7 @@ class PortefeuilleCreate(BaseModel):
     montant_total: float
     actifs: List[ActifCreate]
 
-class DraftInput(BaseModel):
-    draft_name: str
-    expected_returns: List[float]
-    cov_matrix: List[List[float]]
-    target_return: float
-    current_weights: List[float]
-    optimal_weights: List[float]
+class OptimisationRequest(BaseModel):
+    portefeuille_id: int
+    covariance_matrix: List[List[float]]
+

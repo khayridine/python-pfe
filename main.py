@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router
 from user import router as user_router
 from operation import router as operation_router
-from calcul import router as calcul_router
+from optimisation  import  router as optimisation_router
+
 from portefeuille import router as portefeuille_router
 
 
@@ -28,7 +29,8 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(operation_router)
-app.include_router(calcul_router)
+app.include_router(optimisation_router)
+
 
 
 app.include_router(portefeuille_router, prefix="/portefeuille", tags=["Portefeuille"])
