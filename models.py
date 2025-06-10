@@ -6,7 +6,10 @@ from sqlalchemy.orm import relationship
 class Portefeuille(Base):
     __tablename__ = "portefeuilles"
     id = Column(Integer, primary_key=True, index=True)
+    nom = Column(String, nullable=False)
+    
     montant_total = Column(Float, nullable=False)
+    
 
     
     rendement = Column(Float, nullable=True)   # Rendement estimé du portefeuille

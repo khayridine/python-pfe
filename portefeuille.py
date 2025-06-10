@@ -16,7 +16,7 @@ router = APIRouter()
 @router.post("/save-portefeuille")
 def save_portefeuille(portefeuille_data: PortefeuilleCreate, db: Session = Depends(get_db)):
     
-    portefeuille = Portefeuille(montant_total=portefeuille_data.montant_total)
+    portefeuille = Portefeuille(nom=portefeuille_data.nom,montant_total=portefeuille_data.montant_total)
     db.add(portefeuille)
     db.commit()
     db.refresh(portefeuille)
@@ -72,6 +72,7 @@ def get_portefeuilles_complets(taux_sans_risque: float = 7.5, db: Session = Depe
 
         data.append({
             "id": pf.id,
+            "nom":pf.nom,
             "montant_total": pf.montant_total,
             "actifs": actifs,
             "rendement": rendement,
@@ -91,6 +92,7 @@ def comparer_portefeuilles(portefeuille_ids: List[int], taux_sans_risque: float 
 
         data.append({
             "id": pf.id,
+            "nom": pf.nom,
             "montant_total": pf.montant_total,
             "nombre_actifs": len(pf.actifs),
             "rendement": rendement,

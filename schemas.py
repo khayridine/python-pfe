@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 
 class ActifCreate(BaseModel):
@@ -10,6 +10,7 @@ class ActifCreate(BaseModel):
     volatilite: float
 
 class PortefeuilleCreate(BaseModel):
+    nom: str = Field(..., min_length=1)
     montant_total: float
     actifs: List[ActifCreate]
 

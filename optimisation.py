@@ -97,7 +97,8 @@ def get_actifs(portefeuille_id: int):
         "nom": a.nom,
         "rendement": a.rendement,
         "volatilite": a.volatilite,
-        "pourcentage": a.pourcentage
+        "pourcentage": a.pourcentage,
+        "categorie": a.categorie,
     } for a in actifs]
     db.close()
     return result
@@ -135,7 +136,7 @@ def optimiser_portefeuille(req: OptimisationRequest):
 
     message = (
         "Nous avons ajusté vos allocations pour réduire le risque tout en maintenant un rendement attendu similaire. "
-        "Cela signifie que votre argent travaille plus efficacement avec une meilleure stabilité."
+        
     )
 
     return {
